@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:receipes/mobel/receipe.dart';
+import 'package:receipes/recipe_detail.dart';
 
 void main() {
   runApp(const ReceipeApp());
@@ -33,8 +34,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> 
-{
+class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,23 +42,45 @@ class _MyHomePageState extends State<MyHomePage>
       body: SafeArea(
         child: Container(
           child: ListView.builder(
+            itemCount: Recipe.samples.length,
             itemBuilder: (BuildContext context, int index) {
-              return buildRecipeCard(Receipe.samples[index]);
-            },
-            itemCount: Receipe.samples.length,
+              return GestureDetector(
+                onTap: () {
+                  // Hendle recipe card tap
+                  // print((Receipe.samples[index].imgLable));
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => RecipeDetail(recipe: Recipe.samples[index]),
+                  ));
+                },
+                child: buildRecipeCard(Recipe.samples[index]),
+                );  //Reuseฟังก์ชั่น
+              },
             ),
         ),
       ),
     );
   }
 
-  Widget buildRecipeCard(Receipe recipe) {   //ฟังก์ชั่นดีไซต์
+  Widget buildRecipeCard(Recipe recipe) {   //ฟังก์ชั่นดีไซต์
     return Card(
-      child: Column(
-        children: <Widget>[
-          Image(image: AssetImage(recipe.imageUrl)),
-          Text(recipe.imgLable),
-        ],
+      elevation: 2.0,
+      shape: BeveledRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            Image(image: AssetImage(recipe.imageUrl)),
+            SizedBox(height: 8.0),
+            Text(
+              recipe.imgLable, 
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+              ),
+          ],
+        ),
       ),
     );
   }
